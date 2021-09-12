@@ -1,0 +1,58 @@
+includes:
+  - ./zaruba-tasks/airflow/task.zaruba.yaml
+
+tasks:
+
+  run:
+    icon: 👟
+    extend: core.wrapper
+    dependencies:
+      - runAirflow
+
+  runContainer:
+    icon: 🐳
+    extend: core.wrapper
+    dependencies:
+      - runAirflowContainer
+
+  stopContainer:
+    icon: ✋
+    extend: core.wrapper
+    dependencies:
+      - stopAirflowContainer
+
+  removeContainer:
+    icon: 🔥
+    extend: core.wrapper
+    dependencies:
+      - removeAirflowContainer
+
+  pullImage:
+    icon: 📥
+    extend: core.wrapper
+    dependencies: []
+
+  pushImage:
+    icon: 📤
+    extend: core.wrapper
+    dependencies:
+      - pushAirflowImage
+
+  buildImage:
+    icon: 🏭
+    extend: core.wrapper
+    dependencies:
+      - buildAirflowImage
+
+  helmInstall:
+    icon: 🏭
+    extend: core.wrapper
+    dependencies:
+      - helmInstallAirflow
+
+  helmUninstall:
+    icon: 🔥
+    extend: core.wrapper
+    dependencies:
+      - helmUninstallAirflow
+

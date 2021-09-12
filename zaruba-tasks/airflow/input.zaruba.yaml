@@ -1,0 +1,11 @@
+inputs:
+
+  airflowRunInLocal:
+    default: yes
+    options:
+      - yes
+      - no
+    allowCustom: false
+    description: Whether to run airflow in local computer
+    prompt: Run airflow in local computer?
+

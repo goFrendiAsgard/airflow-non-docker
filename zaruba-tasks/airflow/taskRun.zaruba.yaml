@@ -1,0 +1,58 @@
+tasks:
+
+  runAirflowInit:
+    icon: 🐍
+    extend: core.runShellScript
+    location: ../../airflow
+    dependencies: [prepareAirflow]
+    inputs: [airflowRunInLocal]
+    config:
+      start: pipenv run ./airflowInit.sh
+    configRef: airflow
+    envRef: airflow
+
+  runAirflowScheduler:
+    icon: 🐍
+    extend: core.startService
+    location: ../../airflow
+    dependencies: [runAirflowInit]
+    inputs: [airflowRunInLocal]
+    config:
+      start: pipenv run ./airflowScheduler.sh
+    configRef: airflow
+    envRef: airflow
+
+  runAirflowWorker:
+    icon: 🐍
+    extend: core.startService
+    location: ../../airflow
+    dependencies: [runAirflowInit]
+    inputs: [airflowRunInLocal]
+    config:
+      start: pipenv run ./airflowWorker.sh
+    configRef: airflow
+    envRef: airflow
+
+  runAirflowWebserver:
+    icon: 🐍
+    extend: core.startService
+    location: ../../airflow
+    dependencies: [runAirflowInit]
+    inputs: [airflowRunInLocal]
+    config:
+      start: pipenv run ./airflowWebserver.sh
+      ports: '{{ .GetConfig "webServerPort" }}'
+    configRef: airflow
+    envRef: airflow
+
+  runAirflowFlower:
+    icon: 🐍
+    extend: core.startService
+    location: ../../airflow
+    dependencies: [runAirflowInit]
+    inputs: [airflowRunInLocal]
+    config:
+      start: pipenv run ./airflowFlower.sh
+      ports: '{{ .GetConfig "flowerPort" }}'
+    configRef: airflow
+    envRef: airflow

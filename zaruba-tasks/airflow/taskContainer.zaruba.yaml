@@ -1,0 +1,45 @@
+tasks:
+
+  buildAirflowImage:
+    extend: core.buildDockerImage
+    location: ../../airflow
+    timeout: 1h
+    configRef: airflowContainer
+
+  pushAirflowImage:
+    extend: core.pushDockerImage
+    location: ../../airflow
+    timeout: 1h
+    configRef: airflowContainer
+
+  stopAirflowContainer:
+    extend: core.stopDockerContainer
+    configRef: airflowContainer
+
+  removeAirflowContainer:
+    extend: core.removeDockerContainer
+    configRef: airflowContainer
+
+  helmInstallAirflow:
+    extend: core.helmInstall
+    location: ../..
+    dependencies:
+      - helmGenerateValueAirflow
+    timeout: 1h
+    configRef: airflowHelm
+    envRef: airflow
+
+  helmUninstallAirflow:
+    extend: core.helmUninstall
+    location: ../..
+    timeout: 1h
+    configRef: airflowHelm
+
+  helmGenerateValueAirflow:
+    extend: core.helmGenerateValue
+    location: ../..
+    configRefs:
+      - airflowHelm
+      - airflowContainer
+      - airflow
+    envRef: airflow

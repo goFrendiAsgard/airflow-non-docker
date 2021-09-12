@@ -1,0 +1,22 @@
+configs:
+
+  airflow:
+    beforeStart: AIRFLOW_HOME=$(pwd)
+    flowerPort: |
+      {{ if .GetEnv "AIRFLOW__CELERY__FLOWER_PORT" }}{{ .GetEnv "AIRFLOW__CELERY__FLOWER_PORT" }}{{ else }}5555{{ end }}
+    webServerPort: |
+      {{ if .GetEnv "AIRFLOW__WEBSERVER_WEB_SERVER_PORT" }}{{ .GetEnv "AIRFLOW__WEBSERVER_WEB_SERVER_PORT" }}{{ else }}8080{{ end }}
+      
+ 
+  airflowHelm:
+    releaseName: airflow
+    chart: helm/charts/app
+    valueFile: helm/values/airflow.yaml
+    valueTemplateFile: helm/value-templates/app.yaml 
+
+  airflowContainer:
+    containerName: airflow
+    imagePrefix: '{{ .GetValue "defaultImagePrefix" }}'
+    imageName: airflow
+    imageTag: '{{ .GetValue "defaultImageTag" }}'
+    localhost: host.docker.internal

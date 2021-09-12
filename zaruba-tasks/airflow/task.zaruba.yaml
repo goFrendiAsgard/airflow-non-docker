@@ -1,0 +1,52 @@
+includes:
+  - ./config.zaruba.yaml
+  - ./env.zaruba.yaml
+  - ./input.zaruba.yaml
+  - ./taskContainer.zaruba.yaml
+  - ./taskRun.zaruba.yaml
+
+tasks:
+
+  runAirflow:
+    dependencies:
+      - runAirflowScheduler
+      - runAirflowWebserver
+      - runAirflowWorker
+      - runAirflowFlower
+  runAirflowContainer:
+    extend: core.startDockerContainer
+    dependencies:
+      - buildAirflowImage
+    location: ../../airflow
+    inputs:
+      - airflowRunInLocal
+    configRefs:
+      - airflowContainer
+      - airflow
+    envRef: airflow
+
+  testAirflow:
+    icon: 🐍
+    extend: core.runShellScript
+    location: ../../airflow
+    dependencies:
+        - prepareAirflow
+    timeout: 1h
+    config:
+      start: pipenv run pytest -rP -v --cov="$(pwd)" --cov-report html
+    configRef: airflow
+    envRef: airflow
+
+  prepareAirflow:
+    icon: 🐍
+    extend: core.preparePythonApp
+    location: ../../airflow
+    timeout: 1h
+    config:
+      start: |
+        if [ ! -f "airflow-requirements.txt" ]
+        then
+          pipenv run ./airflowInstall.sh
+        fi
+    configRef: airflow
+    envRef: airflow
